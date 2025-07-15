@@ -5,7 +5,8 @@ const penBtn = document.getElementById('pen');
 const eraserBtn = document.getElementById('eraser');
 
 // --- WebSocket Connection ---
-const ws = new WebSocket(`ws://${window.location.host}`);
+const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+const ws = new WebSocket(`${protocol}//${window.location.host}`);
 
 ws.onopen = () => {
     console.log('Connected to WebSocket server');
