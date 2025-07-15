@@ -1,0 +1,7 @@
+node_modules
+session_history.json
+playwright-report
+
+test-results/
+test-results
+
