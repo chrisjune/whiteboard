@@ -23,8 +23,7 @@ ws.onmessage = (event) => {
 };
 
 // --- Canvas Setup ---
-canvas.width = 1280;
-canvas.height = 720;
+
 
 let drawing = false;
 let lastX = 0;
@@ -33,6 +32,21 @@ let tool = 'pen'; // 'pen' or 'eraser'
 let penColor = 'black';
 let eraserColor = 'white'; // Same as canvas background
 let lineWidth = 5;
+
+// Handle canvas resizing
+const resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
+        if (entry.target === canvas) {
+            const { width, height } = entry.contentRect;
+            canvas.width = width;
+            canvas.height = height;
+            // Redraw content if necessary, or clear if it's a fresh resize
+            // For now, we'll just clear it to avoid distortion of old drawings
+            clearCanvas();
+        }
+    }
+});
+resizeObserver.observe(canvas);
 
 // --- Tool Selection ---
 penBtn.addEventListener('click', () => {
