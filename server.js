@@ -22,16 +22,27 @@ wss.on('connection', (ws) => {
   // When a message is received from a client
   ws.on('message', (message) => {
     const messageString = message.toString();
+    const data = JSON.parse(messageString);
 
-    // Add the new drawing data to our history
-    drawingHistory.push(messageString);
+    if (data.type === 'clear') {
+      drawingHistory.length = 0; // Clear the history
+      // Broadcast the clear message to all clients
+      wss.clients.forEach(client => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ type: 'clear' }));
+        }
+      });
+    } else {
+      // Add the new drawing data to our history
+      drawingHistory.push(messageString);
 
-    // Broadcast the new drawing to all other clients
-    wss.clients.forEach((client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(messageString);
-      }
-    });
+      // Broadcast the new drawing to all other clients
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(messageString);
+        }
+      });
+    }
   });
 });
 

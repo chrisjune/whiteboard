@@ -3,6 +3,7 @@ const canvas = document.getElementById('whiteboard');
 const ctx = canvas.getContext('2d');
 const penBtn = document.getElementById('pen');
 const eraserBtn = document.getElementById('eraser');
+const clearBtn = document.getElementById('clear');
 
 // --- WebSocket Connection ---
 const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -16,6 +17,8 @@ ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if (data.type === 'draw') {
         drawLine(data.x0, data.y0, data.x1, data.y1, data.color, data.lineWidth);
+    } else if (data.type === 'clear') {
+        clearCanvas();
     }
 };
 
@@ -46,6 +49,11 @@ eraserBtn.addEventListener('click', () => {
 
 // Set pen as default active tool
 penBtn.classList.add('active');
+
+clearBtn.addEventListener('click', () => {
+    // Send a clear message to the server
+    ws.send(JSON.stringify({ type: 'clear' }));
+});
 
 // --- Drawing Logic ---
 function startDrawing(e) {
@@ -92,6 +100,10 @@ function drawLine(x0, y0, x1, y1, color, width) {
     ctx.lineCap = 'round';
     ctx.stroke();
     ctx.closePath();
+}
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 canvas.addEventListener('mousedown', startDrawing);
