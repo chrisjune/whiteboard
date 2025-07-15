@@ -1,15 +1,24 @@
 {
   "name": "whiteboard",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A real-time collaborative whiteboard application",
+  "main": "server.js",
   "scripts": {
     "test": "playwright test",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "whiteboard",
+    "real-time",
+    "collaboration",
+    "websockets"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/whiteboard.git"
+  },
   "dependencies": {
     "express": "^5.1.0",
     "ws": "^8.18.3"
